@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login / Signup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            text-align: center;
+        }
+        
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #ffd166;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            background: #ef476f;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>✨ Login / Signup ✨</h2>
+        <input type="text" id="alias" placeholder="Alias" required><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button onclick="signup()">Signup</button>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <script>
+        function signup() {
+            let alias = document.getElementById("alias").value;
+            let email = document.getElementById("email").value;
+            let pass = document.getElementById("password").value;
+            if (alias && email && pass) {
+                localStorage.setItem("alias", alias);
+                localStorage.setItem("email", email);
+                localStorage.setItem("password", pass);
+                alert("Signup berhasil! Silakan login.");
+            } else {
+                alert("Isi semua field!");
+            }
+        }
+
+        function login() {
+            let alias = document.getElementById("alias").value;
+            let email = document.getElementById("email").value;
+            let pass = document.getElementById("password").value;
+            if (alias === localStorage.getItem("alias") && email === localStorage.getItem("email") && pass === localStorage.getItem("password")) {
+                alert("Login berhasil!");
+                window.location.href = "PROFILE.html";
+            } else {
+                alert("Data tidak cocok atau belum signup.");
+            }
+        }
+    </script>
+</body>
+
+</html>

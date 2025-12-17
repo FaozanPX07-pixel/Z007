@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Profil | Operasi Cancer</title>
+    <style>
+        /* Reset */
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+        
+        html,
+        body {
+            height: 100%
+        }
+        
+        body {
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: #030416;
+            /* deep night */
+            color: #e6f6ff;
+            overflow: hidden;
+        }
+        /* Starfield (animated) */
+        
+        .starfield {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background: radial-gradient(ellipse at bottom, rgba(3, 6, 22, 0.6), rgba(0, 0, 0, 0.9));
+        }
+        
+        .stars,
+        .stars2,
+        .stars3 {
+            position: absolute;
+            inset: -20% -20% -20% -20%;
+            background-repeat: repeat;
+            background-size: contain;
+            animation: drift 60s linear infinite;
+            opacity: .6;
+            filter: blur(.2px);
+        }
+        
+        .stars {
+            background-image: radial-gradient(#9bdcff 0.8px, transparent 0.9px);
+        }
+        
+        .stars2 {
+            background-image: radial-gradient(#6fb1d9 0.9px, transparent 1px);
+            animation-duration: 90s;
+            opacity: .35;
+        }
+        
+        .stars3 {
+            background-image: radial-gradient(#2f9fc6 0.6px, transparent 0.8px);
+            animation-duration: 130s;
+            opacity: .18;
+        }
+        
+        @keyframes drift {
+            from {
+                transform: translateY(0)
+            }
+            to {
+                transform: translateY(-800px)
+            }
+        }
+        /* Constellation overlay (Cancer) */
+        
+        .constellation {
+            position: fixed;
+            right: 6%;
+            top: 8%;
+            width: 520px;
+            height: 520px;
+            z-index: 1;
+            mix-blend-mode: screen;
+            transform: rotate(-6deg);
+            opacity: .95;
+            pointer-events: none;
+        }
+        
+        .constellation svg {
+            width: 100%;
+            height: 100%
+        }
+        /* Layout */
+        
+        .wrap {
+            position: relative;
+            z-index: 2;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 6vh 8vw;
+        }
+        /* Profile card */
+        
+        .card {
+            width: 520px;
+            max-width: 92vw;
+            padding: 28px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(173, 216, 230, 0.06);
+            backdrop-filter: blur(6px);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 18px;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Neon accent border (mask cross-browser) */
+        
+        .card:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: 16px;
+            padding: 1px;
+            background: linear-gradient(90deg, rgba(0, 199, 255, 0.25), rgba(60, 170, 255, 0.15));
+            /* WebKit mask */
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            /* Standard mask */
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+        }
+        /* Avatar */
+        
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: linear-gradient(180deg, #071428, #0b2f45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transform: scale(1.03);
+            transition: transform .8s ease;
+        }
+        
+        .avatar:hover img {
+            transform: scale(1.08) rotate(-1deg);
+        }
+        
+        .avatar .mask {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.25));
+        }
+        /* Glitch alias */
+        
+        .alias {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: .6px;
+            margin-bottom: 6px;
+            position: relative;
+        }
+        
+        .glitch {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0);
+        }
+        
+        .glitch::before {
+            animation: glitchTop 2.8s infinite linear;
+            opacity: .8;
+            color: #7fe8ff;
+        }
+        
+        .glitch::after {
+            animation: glitchBot 3.6s infinite linear;
+            opacity: .6;
+            color: #b6f0ff;
+        }
+        
+        @keyframes glitchTop {
+            0% {
+                clip: rect(0, 9999px, 0, 0)
+            }
+            10% {
+                clip: rect(0, 9999px, 60px, 0);
+                transform: translate(-2px, -1px)
+            }
+            20% {
+                clip: rect(0, 9999px, 0, 0);
+                transform: none
+            }
+            30% {
+                clip: rect(0, 9999px, 80px, 0);
+                transform: translate(2px, 0)
+            }
+            100% {
+                clip: rect(0, 9999px, 0, 0)
+            }
+        }
+        
+        @keyframes glitchBot {
+            0% {
+                clip: rect(0, 9999px, 0, 0)
+            }
+            15% {
+                clip: rect(40px, 9999px, 120px, 0);
+                transform: translate(1px, 1px)
+            }
+            45% {
+                clip: rect(0, 9999px, 0, 0)
+            }
+            70% {
+                clip: rect(10px, 9999px, 60px, 0);
+                transform: translate(-1px, 2px)
+            }
+            100% {
+                clip: rect(0, 9999px, 0, 0)
+            }
+        }
+        /* Meta list */
+        
+        .meta {
+            font-size: 13px;
+            opacity: .95;
+            color: rgba(230, 246, 255, 0.92);
+        }
+        
+        .meta dl {
+            display: grid;
+            grid-template-columns: 84px 1fr;
+            gap: 6px 12px;
+        }
+        
+        .meta dt {
+            opacity: .6;
+            font-weight: 600;
+        }
+        
+        .meta dd {
+            margin: 0;
+        }
+        /* Bio & actions */
+        
+        .bio {
+            margin-top: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(230, 246, 255, 0.9);
+        }
+        
+        .actions {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 12px;
+            border-radius: 9px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: transparent;
+            color: #bff5ff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .btn.primary {
+            background: linear-gradient(90deg, #007ea7, #00cfff);
+            color: #00161b;
+            box-shadow: 0 6px 18px rgba(0, 204, 255, 0.06);
+        }
+        /* Panel */
+        
+        .panel {
+            position: fixed;
+            right: 6vw;
+            top: 10vh;
+            width: 360px;
+            max-width: 36vw;
+            padding: 18px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(5, 10, 18, 0.6), rgba(2, 6, 12, 0.4));
+            border: 1px solid rgba(0, 120, 160, 0.06);
+            backdrop-filter: blur(6px);
+            z-index: 2;
+        }
+        
+        .panel h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .terminal {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #bff5ff;
+            min-height: 140px;
+        }
+        /* particle */
+        
+        .particle {
+            position: absolute;
+            z-index: 1;
+            left: 10%;
+            top: 10%;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #6fe6ff, #9be5ff);
+            opacity: 0.12;
+            filter: blur(1px);
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0)
+            }
+            50% {
+                transform: translateY(-40px) translateX(20px)
+            }
+            100% {
+                transform: none
+            }
+        }
+        /* Responsive */
+        
+        @media (max-width:900px) {
+            .constellation,
+            .panel {
+                display: none;
+            }
+            .wrap {
+                justify-content: center;
+                padding: 6vh 5vw;
+            }
+            .card {
+                grid-template-columns: 120px 1fr;
+            }
+        }
+        
+        .credit {
+            position: fixed;
+            left: 18px;
+            bottom: 14px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
+            z-index: 3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Animated star layers -->
+    <div class="starfield" aria-hidden="true">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+    </div>
+
+    <!-- Constellation SVG for Cancer (stylized) -->
+    <div class="constellation" aria-hidden="true">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs><filter id="glow"><feGaussianBlur stdDeviation="2.2" result="coloredBlur"/></filter></defs>
+      <rect width="100%" height="100%" fill="none" />
+      <g stroke="none" fill="#bff5ff">
+        <circle cx="110" cy="420" r="3.6" opacity="0.95"/>
+        <circle cx="170" cy="360" r="3" opacity="0.95"/>
+        <circle cx="230" cy="300" r="4" opacity="0.95"/>
+        <circle cx="320" cy="280" r="3.4" opacity="0.95"/>
+        <circle cx="390" cy="330" r="2.8" opacity="0.95"/>
+        <circle cx="460" cy="380" r="3.2" opacity="0.95"/>
+        <circle cx="310" cy="420" r="2.4" opacity="0.95"/>
+      </g>
+      <g stroke="#55d6ff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity="0.7" filter="url(#glow)">
+        <path d="M110 420L170 360L230 300L320 280L390 330L460 380" fill="none"/>
+        <path d="M320 280L310 420" fill="none"/>
+      </g>
+      <text x="30" y="60" fill="#9be5ff" font-size="36" font-family="serif" opacity="0.9">♋</text>
+      <text x="70" y="68" fill="#c8f6ff" font-size="14" font-family="sans-serif" opacity="0.8">CANCER CONSTELLATION</text>
+    </svg>
+    </div>
+
+    <!-- Main content -->
+    <div class="wrap">
+        <article class="card" role="region" aria-label="Profil Hacker">
+
+            <figure class="avatar" title="Alias Avatar">
+                <!-- You can replace avatar.png with your own image; fallback will show if missing -->
+                <img src="PROFILE.jpg" alt="Avatar placeholder" width="150" height="150">
+                <div class="mask"></div>
+            </figure>
+
+            <div>
+                <div class="alias">
+                    <span class="glitch" data-text="OP_CANCER">OP_CANCER</span>
+                    <span style="display:block;font-size:12px;opacity:.6;margin-top:6px">
+            Alias / Operasi: <strong style="color:#dffeff;">Operasi Cancer</strong>
+          </span>
+                </div>
+
+                <div class="meta">
+                    <dl>
+                        <dt>Nama</dt>
+                        <dd>: ♋ Muhammad Ibni Faozan</dd>
+                        <dt>NIM</dt>
+                        <dd>: 251011700558</dd>
+                        <dt>Kelas</dt>
+                        <dd>: 01SIFP009</dd>
+                        <dt>Program Study</dt>
+                        <dd>: System Informasi</dd>
+                        <dt>Asal Sekolah</dt>
+                        <dd>: Man 12 Jakarta (MIPA)</dd>
+                        <dt>Email</dt>
+                        <dd>: ibnisabeni07@gmail.com</dd>
+                        <dt>Nomor HP</dt>
+                        <dd>: 0895412282288</dd>
+                        <dt>Kesan Pesan</dt>
+                        <dd>: Sangat menyenangkan, penjelasan dosen jelas dan mudah dimengerti.<br> Pesan: kalau bisa menjelaskan materi benar-benar dari awal, karena tidak semua teman berasal dari SMK.</dd>
+                    </dl>
+                </div>
+
+                <p class="bio">Pribadi yang intuitif dan penuh perasaan. Suka melindungi yang disayangi, namun misterius dan penuh rahasia. Seseorang yang bergerak di antara bayang-bayang jaringan. Mengambil jejak digital lalu menutup jejaknya — menjaga data yang berharga
+                    dan mengungkap rahasia tersembunyi.</p>
+
+                <div class="actions">
+                    <button="btn" onclick="copyAlias()">Detail</button>
+                        <button class="btn primary" onclick="openLog()"><a href="index.html">Buka Log</a></button>
+                </div>
+            </div>
+
+            <!-- floating particle for aesthetic -->
+            <div class="particle" style="left:48%;top:20%;animation-delay:-2s;width:10px;height:10px;opacity:.08"></div>
+        </article>
+    </div>
+
+    <!-- Right side mysterious panel -->
+    <!-- Right side mysterious panel -->
+    <aside class="panel" aria-label="Panel Informasi Operasi">
+        <h3>Media Operasi</h3>
+
+        <!-- Audio (manual play, hanya efek timbul saat hover) -->
+        <audio id="op-audio" controls style="width:100%; margin-bottom:12px; opacity:.5; transform:scale(.95); transition:all .4s ease;">
+    <source src="Elian Skye - Where We Belong.mp3" type="audio/mpeg"> </audio>
+
+        <!-- Video (auto play saat hover) -->
+        <video id="op-video" style="width:100%; border-radius:8px; opacity:.5; transform:scale(.95); transition:all .4s ease;">
+    <source src="MASTER Z007.mp4" type="video/mp4"> </video>
+
+        <small style="opacity:.5;display:block;margin-top:8px">MASTER Z007</small>
+    </aside>
+
+    <script>
+        const opAudio = document.getElementById('op-audio');
+        const opVideo = document.getElementById('op-video');
+
+        // Efek hover untuk audio (tanpa auto play/pause)
+        opAudio.addEventListener('mouseenter', () => {
+            opAudio.style.opacity = "1";
+            opAudio.style.transform = "scale(1)";
+        });
+        opAudio.addEventListener('mouseleave', () => {
+            opAudio.style.opacity = ".5";
+            opAudio.style.transform = "scale(.95)";
+        });
+
+        // Efek hover untuk video (timbul + auto play/pause)
+        opVideo.addEventListener('mouseenter', () => {
+            opVideo.style.opacity = "1";
+            opVideo.style.transform = "scale(1)";
+            opVideo.play().catch(() => {});
+        });
+        opVideo.addEventListener('mouseleave', () => {
+            opVideo.style.opacity = ".5";
+            opVideo.style.transform = "scale(.95)";
+            opVideo.pause();
+        });
+    </script>
+
+
+    <small style="opacity:.5;display:block;margin-top:8px">MASTER Z007</small>
+    </aside>
+
+    <div class="credit">By THE STARS</div>
+
+    <script>
+        // Copy alias safely with fallback
+        function copyAlias() {
+            const text = 'OP_CANCER';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(() => alert('Alias tersalin: ' + text))
+                    .catch(() => alert('Tidak dapat menyalin alias'));
+                return;
+            }
+            // fallback older browsers
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'absolute';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            const sel = document.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(ta);
+            sel.removeAllRanges();
+            sel.addRange(range);
+            try {
+                document.execCommand('copy');
+                alert('Alias tersalin: ' + text);
+            } catch {
+                alert('Tidak dapat menyalin alias');
+            }
+            sel.removeAllRanges();
+            document.body.removeChild(ta);
+        }
+
+        function openLog() {
+            const t = document.getElementById('terminal');
+            t.textContent += '\n> recon: running...\n> found: 3 open ports\n> fingerprint: CANCER-OPERATOR\n> exit.';
+            t.scrollTop = t.scrollHeight;
+            // flash panel
+            const panel = document.querySelector('.panel');
+            if (panel && panel.animate) {
+                panel.animate([{
+                    boxShadow: '0 0 0px rgba(0,255,255,0)'
+                }, {
+                    boxShadow: '0 0 18px rgba(0,200,255,0.08)'
+                }, {
+                    boxShadow: '0 0 0px rgba(0,255,255,0)'
+                }], {
+                    duration: 900
+                });
+            }
+        }
+
+        // gentle parallax for constellation on mouse move
+        const constel = document.querySelector('.constellation');
+        window.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 12;
+            const y = (e.clientY / window.innerHeight - 0.5) * 8;
+            if (constel) constel.style.transform = `translate(${x}px, ${y}px) rotate(-6deg)`;
+        });
+    </script>
+
+</body>
+
+</html>
